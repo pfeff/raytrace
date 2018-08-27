@@ -1,42 +1,39 @@
+mod tuple;
+
 fn main() {
     println!("Hello, world!");
 }
 
-#[derive(Debug)]
-pub struct Tuple {
-    x: f64,
-    y: f64,
-    z: f64,
-    w: f64,
-}
-
-impl Tuple {
-    pub fn is_point(&self) -> bool {
-        let eps = 1.0e-6;
-        (self.w - 1.0).abs() < eps
-    }
-
-    pub fn is_vector(&self) -> bool {
-        let eps = 1.0e-6;
-        self.w.abs() < eps
-    }
-}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn point() {
-        let a = Tuple { x: 4.3, y: -4.2, z: 3.1, w: 1.00000001 };
+    fn is_point() {
+        let a = tuple::Tuple { x: 4.3, y: -4.2, z: 3.1, w: 1.00000001 };
         assert!(a.is_point());
         assert!(!a.is_vector());
     }
 
     #[test]
-    fn vector() {
-        let a = Tuple { x: 4.3, y: -4.2, z: 3.1, w: 0.00000001 };
+    fn is_vector() {
+        let a = tuple::Tuple { x: 4.3, y: -4.2, z: 3.1, w: 0.00000001 };
         assert!(!a.is_point());
         assert!(a.is_vector());
+    }
+
+    #[test]
+    fn new_vector() {
+        let v = tuple::vector(4.0, -4.0, 3.0);
+        assert!(v.is_vector());
+        assert!(!v.is_point());
+    }
+
+    #[test]
+    fn new_point() {
+        let p = tuple::point(4.0, -4.0, 3.0);
+        assert!(!p.is_vector());
+        assert!(p.is_point());
     }
 }
