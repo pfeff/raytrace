@@ -17,7 +17,11 @@ impl Tuple {
         self.w.abs() < eps
     }
 
-    pub fn equal(&self, &other) -> bool {
+    pub fn equal(&self, other: Tuple) -> bool {
+        self.x == other.x && 
+            self.y == other.y &&
+            self.z == other.z &&
+            self.w == other.w
     }
 }
 
@@ -62,10 +66,17 @@ mod tests {
     }
 
     #[test]
-    fn are_equal() {
+    fn are_not_equal() {
         let t1 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
         let t2 = Tuple { x: 2.0, y: 2.0, z: 2.0, w: 2.0 };
         assert!(!t1.equal(t2));
+    }
+
+    #[test]
+    fn are_equal() {
+        let t1 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
+        let t2 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
+        assert!(t1.equal(t2));
     }
 
 }
