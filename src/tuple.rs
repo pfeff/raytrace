@@ -16,6 +16,9 @@ impl Tuple {
         let eps = 1.0e-6;
         self.w.abs() < eps
     }
+
+    pub fn equal(&self, &other) -> bool {
+    }
 }
 
 pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
