@@ -23,6 +23,24 @@ impl Tuple {
             self.z == other.z &&
             self.w == other.w
     }
+
+    pub fn add(&self, other: Tuple) -> Tuple {
+        Tuple {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
+            w: self.w + other.w
+        }
+    }
+
+    pub fn subtract(&self, other: Tuple) -> Tuple {
+        Tuple {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+            w: self.w - other.w
+        }
+    }
 }
 
 pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
@@ -79,4 +97,27 @@ mod tests {
         assert!(t1.equal(t2));
     }
 
+    #[test]
+    fn addition() {
+        let t1 = Tuple { x: 3.0, y: -2.0, z: 5.0, w: 1.0 };
+        let t2 = Tuple { x: -2.0, y: 3.0, z: 1.0, w: 0.0 };
+        let actual = t1.add(t2);
+        let expected = Tuple { x: 1.0, y: 1.0, z: 6.0, w: 1.0 };
+        assert_eq!(actual.x, expected.x);
+        assert_eq!(actual.y, expected.y);
+        assert_eq!(actual.z, expected.z);
+        assert_eq!(actual.w, expected.w);
+    }
+
+    #[test]
+    fn subtraction() {
+        let p1 = point(3.0, 2.0, 1.0);
+        let p2 = point(5.0, 6.0, 7.0);
+        let expected = vector(-2.0, -4.0, -6.0);
+        let actual = p1.subtract(p2);
+        assert_eq!(actual.x, expected.x);
+        assert_eq!(actual.y, expected.y);
+        assert_eq!(actual.z, expected.z);
+        assert_eq!(actual.w, expected.w);
+    }
 }
