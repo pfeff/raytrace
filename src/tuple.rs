@@ -1,4 +1,6 @@
-#[derive(Debug)]
+use std::ops::{Add, Sub};
+
+#[derive(Debug,PartialEq)]
 pub struct Tuple {
     pub x: f64,
     pub y: f64,
@@ -23,8 +25,12 @@ impl Tuple {
             self.z == other.z &&
             self.w == other.w
     }
+}
 
-    pub fn add(&self, other: Tuple) -> Tuple {
+impl Add for Tuple {
+    type Output = Tuple;
+
+    fn add(self, other: Tuple) -> Tuple {
         Tuple {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -32,8 +38,11 @@ impl Tuple {
             w: self.w + other.w
         }
     }
+}
 
-    pub fn subtract(&self, other: Tuple) -> Tuple {
+impl Sub for Tuple {
+    type Output = Tuple;
+    fn sub(self, other: Tuple) -> Tuple {
         Tuple {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -101,12 +110,14 @@ mod tests {
     fn addition() {
         let t1 = Tuple { x: 3.0, y: -2.0, z: 5.0, w: 1.0 };
         let t2 = Tuple { x: -2.0, y: 3.0, z: 1.0, w: 0.0 };
-        let actual = t1.add(t2);
+        //let actual = t1.add(t2);
+        let actual = t1 + t2;
         let expected = Tuple { x: 1.0, y: 1.0, z: 6.0, w: 1.0 };
         assert_eq!(actual.x, expected.x);
         assert_eq!(actual.y, expected.y);
         assert_eq!(actual.z, expected.z);
         assert_eq!(actual.w, expected.w);
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -114,7 +125,7 @@ mod tests {
         let p1 = point(3.0, 2.0, 1.0);
         let p2 = point(5.0, 6.0, 7.0);
         let expected = vector(-2.0, -4.0, -6.0);
-        let actual = p1.subtract(p2);
+        let actual = p1 - p2;
         assert_eq!(actual.x, expected.x);
         assert_eq!(actual.y, expected.y);
         assert_eq!(actual.z, expected.z);
@@ -125,7 +136,7 @@ mod tests {
     fn subtract_vector_from_point() {
         let p = point(3.0, 2.0, 1.0);
         let v = vector(5.0, 6.0, 7.0);
-        let actual = p.subtract(v);
+        let actual = p - v;
         let expected = point(-2.0, -4.0, -6.0);
         assert!(actual.equal(expected));
     }
@@ -134,7 +145,7 @@ mod tests {
     fn subtract_two_vectors() {
         let v1 = vector(3.0, 2.0, 1.0);
         let v2 = vector(5.0, 6.0, 7.0);
-        let actual = v1.subtract(v2);
+        let actual = v1 - v2;
         let expected = vector(-2.0, -4.0, -6.0);
         assert!(actual.equal(expected));
     }
