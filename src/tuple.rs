@@ -120,4 +120,13 @@ mod tests {
         assert_eq!(actual.z, expected.z);
         assert_eq!(actual.w, expected.w);
     }
+
+    #[test]
+    fn subtract_vector_from_point() {
+        let p = point(3.0, 2.0, 1.0);
+        let v = vector(5.0, 6.0, 7.0);
+        let actual = p.subtract(v);
+        let expected = point(-2.0, -4.0, -6.0);
+        assert!(actual.equal(expected));
+    }
 }
