@@ -129,4 +129,13 @@ mod tests {
         let expected = point(-2.0, -4.0, -6.0);
         assert!(actual.equal(expected));
     }
+
+    #[test]
+    fn subtract_two_vectors() {
+        let v1 = vector(3.0, 2.0, 1.0);
+        let v2 = vector(5.0, 6.0, 7.0);
+        let actual = v1.subtract(v2);
+        let expected = vector(-2.0, -4.0, -6.0);
+        assert!(actual.equal(expected));
+    }
 }
