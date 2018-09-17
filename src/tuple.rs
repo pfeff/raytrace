@@ -1,4 +1,5 @@
 use std::ops::{Add, Sub, Neg};
+use std::ops::Mul;
 
 #[derive(Debug,PartialEq)]
 pub struct Tuple {
@@ -65,12 +66,24 @@ impl Neg for Tuple {
     }
 }
 
+impl Mul<f64> for Tuple {
+    type Output = Tuple;
+
+    fn mul(self, rhs: f64) -> Tuple {
+        tuple(self.x * rhs, self.y * rhs, self.z * rhs, self.w * rhs)
+    }
+}
+
+fn tuple(x: f64, y: f64, z: f64, w: f64) -> Tuple {
+    Tuple { x: x, y: y, z: z, w: w }
+}
+
 pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
-    Tuple { x: x, y: y, z: z, w: 0.0 }
+    tuple(x, y, z, 0.0)
 }
 
 pub fn point(x: f64, y: f64, z: f64) -> Tuple {
-    Tuple { x: x, y: y, z: z, w: 1.0 }
+    tuple(x, y, z, 1.0)
 }
 
 #[cfg(test)]
@@ -182,5 +195,11 @@ mod tests {
         let expected = Tuple { x: -1.0, y: 2.0, z: -3.0, w: 4.0 };
         let actual = -a;
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn scalar_multiply() {
+        let a = tuple(1.0, -2.0, 3.0, -4.0);
+        assert_eq!(a * 3.5, tuple(3.5, -7.0, 10.5, -14.0))
     }
 }
