@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub};
+use std::ops::{Add, Sub, Neg};
 
 #[derive(Debug,PartialEq)]
 pub struct Tuple {
@@ -48,6 +48,19 @@ impl Sub for Tuple {
             y: self.y - other.y,
             z: self.z - other.z,
             w: self.w - other.w
+        }
+    }
+}
+
+impl Neg for Tuple {
+    type Output = Tuple;
+
+    fn neg(self) -> Tuple {
+        Tuple {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+            w: -self.w,
         }
     }
 }
@@ -148,5 +161,26 @@ mod tests {
         let actual = v1 - v2;
         let expected = vector(-2.0, -4.0, -6.0);
         assert!(actual.equal(expected));
+    }
+
+    #[test]
+    fn subtract_from_zero() {
+        let zero = Tuple {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+            w: 0.0
+        };
+        let v = vector(1.0, -2.0, 3.0);
+        let expected = vector(-1.0, 2.0, -3.0);
+        assert_eq!(expected, zero - v);
+    }
+
+    #[test]
+    fn negate_tuple() {
+        let a = Tuple { x: 1.0, y: -2.0, z: 3.0, w: -4.0 };
+        let expected = Tuple { x: -1.0, y: 2.0, z: -3.0, w: 4.0 };
+        let actual = -a;
+        assert_eq!(expected, actual);
     }
 }
