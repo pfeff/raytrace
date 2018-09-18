@@ -1,5 +1,5 @@
 use std::ops::{Add, Sub, Neg};
-use std::ops::Mul;
+use std::ops::{Mul, Div};
 
 #[derive(Debug,PartialEq)]
 pub struct Tuple {
@@ -71,6 +71,14 @@ impl Mul<f64> for Tuple {
 
     fn mul(self, rhs: f64) -> Tuple {
         tuple(self.x * rhs, self.y * rhs, self.z * rhs, self.w * rhs)
+    }
+}
+
+impl Div<f64> for Tuple {
+    type Output = Tuple;
+
+    fn div(self, rhs: f64) -> Tuple {
+        tuple(self.x / rhs, self.y / rhs, self.z / rhs, self.w / rhs)
     }
 }
 
@@ -201,5 +209,17 @@ mod tests {
     fn scalar_multiply() {
         let a = tuple(1.0, -2.0, 3.0, -4.0);
         assert_eq!(a * 3.5, tuple(3.5, -7.0, 10.5, -14.0))
+    }
+
+    #[test]
+    fn multiply_by_fraction() {
+        let a = tuple(1.0, -2.0, 3.0, -4.0);
+        assert_eq!(a * 0.5, tuple(0.5, -1.0, 1.5, -2.0))
+    }
+
+    #[test]
+    fn divide_by_scalar() {
+        let a = tuple(1.0, -2.0, 3.0, -4.0);
+        assert_eq!(a/2.0, tuple(0.5, -1.0, 1.5, -2.0))
     }
 }
