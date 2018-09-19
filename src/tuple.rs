@@ -26,6 +26,19 @@ impl Tuple {
             self.z == other.z &&
             self.w == other.w
     }
+
+    pub fn magnitude(&self) -> f64 {
+        let sum_squares = self.x.powf(2.0) + self.y.powf(2.0) + self.z.powf(2.0) + self.w.powf(2.0);
+        sum_squares.sqrt()
+    }
+
+    pub fn normalize(&self) -> Tuple {
+        let magnitude = self.magnitude();
+        tuple(self.x / magnitude,
+              self.y / magnitude,
+              self.z / magnitude,
+              self.w / magnitude)
+    }
 }
 
 impl Add for Tuple {
@@ -92,11 +105,6 @@ pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
 
 pub fn point(x: f64, y: f64, z: f64) -> Tuple {
     tuple(x, y, z, 1.0)
-}
-
-pub fn magnitude(v: Tuple) -> f64 {
-    let sum_squares = v.x.powf(2.0) + v.y.powf(2.0) + v.z.powf(2.0) + v.w.powf(2.0);
-    sum_squares.sqrt()
 }
 
 #[cfg(test)]
@@ -231,18 +239,27 @@ mod tests {
     #[test]
     fn magnitude_of_vector() {
         let v1 = vector(1.0, 0.0, 0.0);
-        assert_eq!(1.0, magnitude(v1));
+        assert_eq!(1.0, v1.magnitude());
 
         let v2 = vector(0.0, 1.0, 0.0);
-        assert_eq!(1.0, magnitude(v2));
+        assert_eq!(1.0, v2.magnitude());
 
         let v3 = vector(0.0, 0.0, 1.0);
-        assert_eq!(1.0, magnitude(v3));
+        assert_eq!(1.0, v3.magnitude());
 
         let v4 = vector(1.0, 2.0, 3.0);
-        assert_eq!(14.0_f64.sqrt(), magnitude(v4));
+        assert_eq!(14.0_f64.sqrt(), v4.magnitude());
 
         let v5 = vector(-1.0, -2.0, -3.0);
-        assert_eq!(14_f64.sqrt(), magnitude(v5));
+        assert_eq!(14_f64.sqrt(), v5.magnitude());
+    }
+
+    #[test]
+    fn normalize_vector() {
+        let v1 = vector(4.0, 0.0, 0.0);
+        assert_eq!(v1.normalize(), vector(1.0,0.0,0.0));
+
+        let v2 = vector(1.0, 2.0, 3.0);
+        assert_eq!(v2.normalize().magnitude(), 1.0);
     }
 }
