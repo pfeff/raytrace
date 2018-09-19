@@ -94,6 +94,11 @@ pub fn point(x: f64, y: f64, z: f64) -> Tuple {
     tuple(x, y, z, 1.0)
 }
 
+pub fn magnitude(v: Tuple) -> f64 {
+    let sum_squares = v.x.powf(2.0) + v.y.powf(2.0) + v.z.powf(2.0) + v.w.powf(2.0);
+    sum_squares.sqrt()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -221,5 +226,23 @@ mod tests {
     fn divide_by_scalar() {
         let a = tuple(1.0, -2.0, 3.0, -4.0);
         assert_eq!(a/2.0, tuple(0.5, -1.0, 1.5, -2.0))
+    }
+
+    #[test]
+    fn magnitude_of_vector() {
+        let v1 = vector(1.0, 0.0, 0.0);
+        assert_eq!(1.0, magnitude(v1));
+
+        let v2 = vector(0.0, 1.0, 0.0);
+        assert_eq!(1.0, magnitude(v2));
+
+        let v3 = vector(0.0, 0.0, 1.0);
+        assert_eq!(1.0, magnitude(v3));
+
+        let v4 = vector(1.0, 2.0, 3.0);
+        assert_eq!(14.0_f64.sqrt(), magnitude(v4));
+
+        let v5 = vector(-1.0, -2.0, -3.0);
+        assert_eq!(14_f64.sqrt(), magnitude(v5));
     }
 }
