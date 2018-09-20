@@ -20,7 +20,7 @@ impl Tuple {
         self.w.abs() < eps
     }
 
-    pub fn equal(&self, other: Tuple) -> bool {
+    pub fn equal(&self, other: &Tuple) -> bool {
         self.x == other.x && 
             self.y == other.y &&
             self.z == other.z &&
@@ -40,11 +40,17 @@ impl Tuple {
               self.w / magnitude)
     }
 
-    pub fn dot(&self, other: Tuple) -> f64 {
+    pub fn dot(&self, other: &Tuple) -> f64 {
         self.x * other.x +
             self.y * other.y +
             self.z * other.z +
             self.w * other.w
+    }
+
+    pub fn cross(&self, other: &Tuple) -> Tuple {
+        vector(self.y * other.z - self.z * other.y,
+               self.z * other.x - self.x * other.z,
+               self.x * other.y - self.y * other.x)
     }
 }
 
@@ -150,14 +156,14 @@ mod tests {
     fn are_not_equal() {
         let t1 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
         let t2 = Tuple { x: 2.0, y: 2.0, z: 2.0, w: 2.0 };
-        assert!(!t1.equal(t2));
+        assert!(!t1.equal(&t2));
     }
 
     #[test]
     fn are_equal() {
         let t1 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
         let t2 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
-        assert!(t1.equal(t2));
+        assert!(t1.equal(&t2));
     }
 
     #[test]
@@ -192,7 +198,7 @@ mod tests {
         let v = vector(5.0, 6.0, 7.0);
         let actual = p - v;
         let expected = point(-2.0, -4.0, -6.0);
-        assert!(actual.equal(expected));
+        assert!(actual.equal(&expected));
     }
 
     #[test]
@@ -201,7 +207,7 @@ mod tests {
         let v2 = vector(5.0, 6.0, 7.0);
         let actual = v1 - v2;
         let expected = vector(-2.0, -4.0, -6.0);
-        assert!(actual.equal(expected));
+        assert!(actual.equal(&expected));
     }
 
     #[test]
@@ -274,6 +280,14 @@ mod tests {
     fn dot_product() {
         let a = vector(1.0, 2.0, 3.0);
         let b = vector(2.0, 3.0, 4.0);
-        assert_eq!(a.dot(b), 20.0);
+        assert_eq!(a.dot(&b), 20.0);
+    }
+
+    #[test]
+    fn cross_product() {
+        let a = vector(1.0, 2.0, 3.0);
+        let b = vector(2.0, 3.0, 4.0);
+        assert_eq!(a.cross(&b), vector(-1.0, 2.0, -1.0));
+        assert_eq!(b.cross(&a), vector(1.0, -2.0, 1.0));
     }
 }
