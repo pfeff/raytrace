@@ -39,6 +39,13 @@ impl Tuple {
               self.z / magnitude,
               self.w / magnitude)
     }
+
+    pub fn dot(&self, other: Tuple) -> f64 {
+        self.x * other.x +
+            self.y * other.y +
+            self.z * other.z +
+            self.w * other.w
+    }
 }
 
 impl Add for Tuple {
@@ -261,5 +268,12 @@ mod tests {
 
         let v2 = vector(1.0, 2.0, 3.0);
         assert_eq!(v2.normalize().magnitude(), 1.0);
+    }
+
+    #[test]
+    fn dot_product() {
+        let a = vector(1.0, 2.0, 3.0);
+        let b = vector(2.0, 3.0, 4.0);
+        assert_eq!(a.dot(b), 20.0);
     }
 }
