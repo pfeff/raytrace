@@ -9,6 +9,44 @@ pub struct Tuple {
     pub w: f64,
 }
 
+trait Vector {
+    fn magnitude(&self) -> f64;
+    fn normalize(&self) -> Self;
+    fn cross(&self, other: &Self) -> Self;
+    fn dot(&self, other: &Self) -> f64;
+}
+
+impl Vector for Tuple {
+    fn cross(&self, other: &Tuple) -> Tuple {
+        vector(self.y * other.z - self.z * other.y,
+               self.z * other.x - self.x * other.z,
+               self.x * other.y - self.y * other.x)
+    }
+
+    fn dot(&self, other: &Tuple) -> f64 {
+        self.x * other.x +
+            self.y * other.y +
+            self.z * other.z +
+            self.w * other.w
+    }
+
+    fn normalize(&self) -> Tuple {
+        let magnitude = self.magnitude();
+        tuple(self.x / magnitude,
+              self.y / magnitude,
+              self.z / magnitude,
+              self.w / magnitude)
+    }
+
+    fn magnitude(&self) -> f64 {
+        let sum_squares = self.x.powf(2.0) + self.y.powf(2.0) + self.z.powf(2.0) + self.w.powf(2.0);
+        sum_squares.sqrt()
+    }
+
+}
+
+trait Point {}
+
 impl Tuple {
     pub fn is_point(&self) -> bool {
         let eps = 1.0e-6;
@@ -27,31 +65,6 @@ impl Tuple {
             self.w == other.w
     }
 
-    pub fn magnitude(&self) -> f64 {
-        let sum_squares = self.x.powf(2.0) + self.y.powf(2.0) + self.z.powf(2.0) + self.w.powf(2.0);
-        sum_squares.sqrt()
-    }
-
-    pub fn normalize(&self) -> Tuple {
-        let magnitude = self.magnitude();
-        tuple(self.x / magnitude,
-              self.y / magnitude,
-              self.z / magnitude,
-              self.w / magnitude)
-    }
-
-    pub fn dot(&self, other: &Tuple) -> f64 {
-        self.x * other.x +
-            self.y * other.y +
-            self.z * other.z +
-            self.w * other.w
-    }
-
-    pub fn cross(&self, other: &Tuple) -> Tuple {
-        vector(self.y * other.z - self.z * other.y,
-               self.z * other.x - self.x * other.z,
-               self.x * other.y - self.y * other.x)
-    }
 }
 
 impl Add for Tuple {
