@@ -1,7 +1,7 @@
 use std::ops::{Add, Sub, Neg};
 use std::ops::{Mul, Div};
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug)]
 pub struct Tuple {
     pub x: f64,
     pub y: f64,
@@ -58,13 +58,16 @@ impl Tuple {
         self.w.abs() < eps
     }
 
-    pub fn equal(&self, other: &Tuple) -> bool {
-        self.x == other.x && 
-            self.y == other.y &&
-            self.z == other.z &&
-            self.w == other.w
-    }
+}
 
+impl PartialEq for Tuple {
+    fn eq(&self, other: &Tuple) -> bool {
+        let eps = 1.0e-6;
+        ((self.x - other.x).abs() < eps) &&
+            ((self.y - other.y).abs() < eps) &&
+            ((self.z - other.z).abs() < eps) &&
+            ((self.w - other.w).abs() < eps)
+    }
 }
 
 impl Add for Tuple {
@@ -110,6 +113,14 @@ impl Mul<f64> for Tuple {
 
     fn mul(self, rhs: f64) -> Tuple {
         tuple(self.x * rhs, self.y * rhs, self.z * rhs, self.w * rhs)
+    }
+}
+
+impl Mul<Tuple> for Tuple {
+    type Output = Tuple;
+
+    fn mul(self, rhs: Tuple) -> Tuple {
+        tuple(self.x * rhs.x, self.y * rhs.y, self.z * rhs.z, self.w * rhs.w)
     }
 }
 
@@ -169,14 +180,14 @@ mod tests {
     fn are_not_equal() {
         let t1 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
         let t2 = Tuple { x: 2.0, y: 2.0, z: 2.0, w: 2.0 };
-        assert!(!t1.equal(&t2));
+        assert!(t1 != t2);
     }
 
     #[test]
     fn are_equal() {
         let t1 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
         let t2 = Tuple { x: 1.0, y: 1.0, z: 1.0, w: 1.0 };
-        assert!(t1.equal(&t2));
+        assert!(t1 == t2);
     }
 
     #[test]
@@ -211,7 +222,7 @@ mod tests {
         let v = vector(5.0, 6.0, 7.0);
         let actual = p - v;
         let expected = point(-2.0, -4.0, -6.0);
-        assert!(actual.equal(&expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -220,7 +231,7 @@ mod tests {
         let v2 = vector(5.0, 6.0, 7.0);
         let actual = v1 - v2;
         let expected = vector(-2.0, -4.0, -6.0);
-        assert!(actual.equal(&expected));
+        assert!(actual == expected);
     }
 
     #[test]
