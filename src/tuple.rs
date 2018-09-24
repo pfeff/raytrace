@@ -1,7 +1,7 @@
 use std::ops::{Add, Sub, Neg};
 use std::ops::{Mul, Div};
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Tuple {
     pub x: f64,
     pub y: f64,

@@ -10,6 +10,11 @@ pub fn color(r: f64, g: f64, b: f64) -> Tuple {
     Tuple {x: r, y: g, z: b, w: 0.0}
 }
 
+pub fn white() -> Tuple {
+    color(0.0, 0.0, 0.0)
+}
+
+
 impl Color for Tuple {
     fn red(&self) -> f64 {
         self.x
